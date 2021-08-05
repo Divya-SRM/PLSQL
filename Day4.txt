@@ -1,0 +1,335 @@
+
+1. Write a simple PL/SQL (Anonymous block) program to generate multiplication table for a given number.
+________________________________________________________________________________________________________
+
+SQL> declare
+  2  n number:=&n;
+  3  i number;
+  4  begin
+  5  for i in 1..10
+  6  loop
+  7  dbms_output.put_line(n||' x '||i||' = '||n*i);
+  8  end loop;
+  9  end;
+ 10  /
+Enter value for n: 8
+old   2: n number:=&n;
+new   2: n number:=8;
+8 x 1 = 8
+8 x 2 = 16
+8 x 3 = 24
+8 x 4 = 32
+8 x 5 = 40
+8 x 6 = 48
+8 x 7 = 56
+8 x 8 = 64
+8 x 9 = 72
+8 x 10 = 80
+
+
+PL/SQL procedure successfully completed.
+
+
+2. Write a PL/SQL code to print first 50 whole numbers. Also insert the list in temp table which is created with only one column of number datatype.
+____________________________________________________________________________________________________________________________________________________
+
+SQL> DECLARE
+  2  BEGIN
+  3  for i in 1..50
+  4  loop
+  5  INSERT INTO temp VALUES(i);
+  6  end loop;
+  7  END;
+  8  /
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from temp
+  2
+SQL> select * from temp;
+
+       NUM
+----------
+         1
+         2
+         3
+         4
+         5
+         6
+         7
+         8
+         9
+        10
+        11
+
+       NUM
+----------
+        12
+        13
+        14
+        15
+        16
+        17
+        18
+        19
+        20
+        21
+        22
+
+       NUM
+----------
+        23
+        24
+        25
+        26
+        27
+        28
+        29
+        30
+        31
+        32
+        33
+
+       NUM
+----------
+        34
+        35
+        36
+        37
+        38
+        39
+        40
+        41
+        42
+        43
+        44
+
+       NUM
+----------
+        45
+        46
+        47
+        48
+        49
+        50
+
+
+50 rows selected.
+
+4. Create a trigger for the employee table, which makes the entry in ENAME column in uppercase.
+_______________________________________________________________________________________________
+
+SQL> CREATE OR REPLACE TRIGGER employee_insert_update
+  2   BEFORE INSERT OR UPDATE ON employee
+  3   for each row
+  4   BEGIN
+  5         :NEW.emp_name := UPPER(:NEW.emp_name);
+  6    END;
+  7  /
+
+Trigger created.
+
+SQL> insert into employee values(113,'praveen','devi@gmail.com',965874512,50,25000);
+
+1 row created.
+
+SQL> select * from employee;
+
+    EMP_ID EMP_NAME             EMAIL                     PHONE_NUMB    DEPT_ID
+---------- -------------------- ------------------------- ---------- ----------
+    SALARY
+----------
+       101 Babu                 babu101@gmail.com         9448341201         10
+     12000
+
+       109 DEVIPRIYA            devi@gmail.com            965874512          50
+     25000
+
+       103 Ramu                 ramu103@gmail.com         9448886634         40
+     15000
+
+
+    EMP_ID EMP_NAME             EMAIL                     PHONE_NUMB    DEPT_ID
+---------- -------------------- ------------------------- ---------- ----------
+    SALARY
+----------
+       110 DVI                  devi@gmail.com            965874512          50
+     25000
+
+       105 Anbu                 anbu105@gmail.com         9448341201         40
+     24000
+
+       106 Preethi              prethi@gmail.com          9448534120         30
+     26400
+
+
+    EMP_ID EMP_NAME             EMAIL                     PHONE_NUMB    DEPT_ID
+---------- -------------------- ------------------------- ---------- ----------
+    SALARY
+----------
+       108 DEVI                 devi@gmail.com            965874512          50
+     25000
+
+       113 PRAVEEN              devi@gmail.com            965874512          50
+     25000
+	 
+	 
+8 rows selected.
+
+
+5. Write a PL/SQL block to fire any two built in exceptions in ORACLE by assuming your own data in a table.
+______________________________________________________________________________________________________________
+
+SQL>  DECLARE
+  2     d_id depart.depart_id%type := &d_id;
+  3     d_name depart.depart_name%type;
+  4    d_mid depart.manager_id%type;
+  5  BEGIN
+  6     SELECT depart_id,depart_name,manager_id into d_id,d_name,d_mid from depart
+  7     WHERE depart_id=d_id;
+  8     DBMS_OUTPUT.PUT_LINE ('Dept Id: '|| d_id);
+  9     DBMS_OUTPUT.PUT_LINE ('Dept Name: '|| d_name);
+ 10     DBMS_OUTPUT.PUT_LINE ('Manager Id: ' || d_mid);
+ 11
+ 12  EXCEPTION
+ 13     WHEN no_data_found THEN
+ 14    dbms_output.put_line('No such Record with Dept_Id =5!');
+ 15     WHEN others THEN
+ 16    dbms_output.put_line('Error!');
+ 17  END;
+ 18  /
+Enter value for d_id: 89
+old   2:    d_id depart.depart_id%type := &d_id;
+new   2:    d_id depart.depart_id%type := 89;
+No such Record with Dept_Id =5!
+
+PL/SQL procedure successfully completed.
+
+
+6. Write a function in PL/SQL to check whether the given string is a palindrome or not. (Use any appropriate built-in functions available)
+____________________________________________________________________________________________________________________________________________________
+
+SQL> DECLARE
+  2          len number;
+  3          palstr varchar2(20) := '&palstr';
+  4         chkstr varchar2(20);
+  5
+  6      BEGIN
+  7          len := length(palstr);
+  8          for i in REVERSE 1..len loop
+  9           chkstr := chkstr||substr(palstr,i,1);
+ 10         end loop;
+ 11         if chkstr = palstr then
+ 12         dbms_output.put_line(palstr||' is a PALINDROME');
+ 13         else
+ 14          dbms_output.put_line(palstr||' is not a PALINDROME');
+ 15         end if;
+ 16     END;
+ 17  /
+Enter value for palstr: madam
+old   3:         palstr varchar2(20) := '&palstr';
+new   3:         palstr varchar2(20) := 'madam';
+madam is a PALINDROME
+
+PL/SQL procedure successfully completed.
+
+SQL> DECLARE
+  2          len number;
+  3          palstr varchar2(20) := '&palstr';
+  4         chkstr varchar2(20);
+  5
+  6      BEGIN
+  7          len := length(palstr);
+  8          for i in REVERSE 1..len loop
+  9           chkstr := chkstr||substr(palstr,i,1);
+ 10         end loop;
+ 11         if chkstr = palstr then
+ 12         dbms_output.put_line(palstr||' is a PALINDROME');
+ 13         else
+ 14          dbms_output.put_line(palstr||' is not a PALINDROME');
+ 15         end if;
+ 16     END;
+ 17  /
+Enter value for palstr: string
+old   3:         palstr varchar2(20) := '&palstr';
+new   3:         palstr varchar2(20) := 'string';
+string is not a PALINDROME
+
+PL/SQL procedure successfully completed.
+
+
+
+7. Write a PL/SQL block to fire any one user defined exception by assuming your own data in a table.
+___________________________________________________________________________________________________________
+
+SQL> DECLARE
+  2     d_id depart.depart_id%type := &dd_id;
+  3     d_name depart.depart_name%type;
+  4     d_mid depart.manager_id%type;
+  5     -- user defined exception
+  6     ex_invalid_id  EXCEPTION;
+  7  BEGIN
+  8     IF d_id <= 0 THEN
+  9        RAISE ex_invalid_id;
+ 10     ELSE
+ 11        SELECT depart_id,depart_name,manager_id into d_id,d_name,d_mid from depart
+ 12     WHERE depart_id=d_id;
+ 13     DBMS_OUTPUT.PUT_LINE ('Dept Id: '|| d_id);
+ 14     DBMS_OUTPUT.PUT_LINE ('Dept Name: '|| d_name);
+ 15     DBMS_OUTPUT.PUT_LINE ('Manager Id: ' || d_mid);
+ 16     END IF;
+ 17
+ 18  EXCEPTION
+ 19     WHEN ex_invalid_id THEN
+ 20        dbms_output.put_line('ID must be greater than zero!');
+ 21     WHEN no_data_found THEN
+ 22        dbms_output.put_line('No such customer!');
+ 23     WHEN others THEN
+ 24        dbms_output.put_line('Error!');
+ 25  END;
+ 26  /
+Enter value for dd_id: 0
+old   2:    d_id depart.depart_id%type := &dd_id;
+new   2:    d_id depart.depart_id%type := 0;
+ID must be greater than zero!
+
+PL/SQL procedure successfully completed.
+
+
+
+8. Write a named procedure to delete records available in your table.
+____________________________________________________________________________
+
+SQL> DECLARE
+  2     a number:=&a;
+  3
+  4  PROCEDURE delete_record(x IN number) IS
+  5  BEGIN
+  6    delete from student where stu_id=x;
+  7  END;
+  8  BEGIN
+  9    delete_record(a);
+ 10  END;
+ 11  /
+Enter value for a: 70
+old   2:    a number:=&a;
+new   2:    a number:=70;
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from student;
+
+    STU_ID STU_NAME                       SEX     TOT_MARKS
+---------- ------------------------------ ------ ----------
+        10 Anu                            Female        553
+        20 Anbu                           Male          345
+        30 Malini                         Female        567
+        40 Sankar                         Male          590
+        50 Varshan                        Male          587
+        60 Divya                          Female        400
+        80 Heera                          Female        490
+
+7 rows selected.
+
+
+

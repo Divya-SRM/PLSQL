@@ -1,0 +1,238 @@
+1. (a)create a student table with the following details (Assume your own datatypes for the data.
+_________________________________________________________________________________________________
+
+
+SQL> create table student (STU_ID number(4) primary key,STU_NAME varchar2(30) not null,SEX character(6) not  null,Tot_MARKS number(6,2) not null);
+
+Table created.
+
+SQL> insert all    into student (STU_ID,STU_NAME,SEX,Tot_MARKS) values(10,'Anu','Female',553)    into student (STU_ID,STU_NAME,SEX,Tot_MARKS) values(20,'Anbu','Male',345)    into student (STU_ID,STU_NAME,SEX,Tot_MARKS) values(30,'Malini','Female',567)    into student (STU_ID,STU_NAME,SEX,Tot_MARKS) values(40,'Sankar','Male',590)    into student (STU_ID,STU_NAME,SEX,Tot_MARKS) values(50,'Varshan','Male',587)    select * from dual;
+
+5 rows created.
+
+SQL> select * from student;
+
+    STU_ID STU_NAME                       SEX     TOT_MARKS
+---------- ------------------------------ ------ ----------
+        10 Anu                            Female        553
+        20 Anbu                           Male          345
+        30 Malini                         Female        567
+        40 Sankar                         Male          590
+        50 Varshan                        Male          587
+
+(a)Select the maximum marks of a student in the table
+_____________________________________________________________________________
+
+SQL> select max(tot_marks) from student;
+
+
+MAX(TOT_MARKS)
+--------------
+           590
+
+
+(b)Select the number of male and female students in the table.
+______________________________________________________________________________
+
+
+SQL> select sex,count(*) from student group by sex;
+
+SEX      COUNT(*)
+------ ----------
+Female          2
+Male            3
+
+
+(c)Select the average marks scored by male and female group of students in the table
+
+_________________________________________________________________________________________
+
+SQL> select sex,avg(tot_marks) from student group by sex;
+
+SEX    AVG(TOT_MARKS)
+------ --------------
+Female            560
+Male       507.333333
+
+
+(d) select all students who scored marks greater than the average mark of the students in the table
+____________________________________________________________________________________________________
+
+
+
+SQL> select * from student where tot_marks>(select avg(tot_marks) from student);
+
+    STU_ID STU_NAME                       SEX     TOT_MARKS
+---------- ------------------------------ ------ ----------
+        10 Anu                            Female        553
+        30 Malini                         Female        567
+        40 Sankar                         Male          590
+        50 Varshan                        Male          587
+		
+		
+		
+(e) Select the group of students who scored greater average marks than the average marks of the entire students in the table
+____________________________________________________________________________________________________________________________
+		
+		
+SQL> select studentname,totalmarks, avg(totalmarks) as average from student group by studentname having average >(select avg(totalmarks) from student);
+
+
+  STU_NAME                        TOT_MARKS   AVERAGE
+ ------------------------------  ----------  -----------
+      Anu                            553       553.0000
+      Malini                         567       567.0000
+      Sankar                         590       590.0000
+      Varshan                        587       587.0000
+		
+		
+2. (a)select all student details whose name value consists of exactly three characters.
+______________________________________________________________________________________________________
+
+SQL> select * from student where stu_name like '___';
+
+    STU_ID STU_NAME                       SEX     TOT_MARKS
+---------- ------------------------------ ------ ----------
+        10 Anu                            Female        553
+		
+		
+2.  (b)Display all students in ascending order of their sex and descending order of their marks.
+________________________________________________________________________________________________________
+
+SQL> select * from student order by sex asc, tot_marks desc;
+
+    STU_ID STU_NAME                       SEX     TOT_MARKS
+---------- ------------------------------ ------ ----------
+        30 Malini                         Female        567
+        10 Anu                            Female        553
+        40 Sankar                         Male          590
+        50 Varshan                        Male          587
+        20 Anbu                           Male          345
+		
+		
+		
+3. Find the difference in marks between maximum and minimum in the class.
+_________________________________________________________________________________________________________
+
+SQL> select max(tot_marks)-min(tot_marks) from student;
+
+MAX(TOT_MARKS)-MIN(TOT_MARKS)
+-----------------------------
+                          245
+						  
+						  
+4. Create a view object for student table with name ‘mytab’ by assuming your own condition for the selection and 
+demonstrate the role of ‘with check option’ for the created view.
+
+____________________________________________________________________________________________________________________
+
+SQL> create view mytab as select * from student where tot_marks>500   WITH CHECK OPTION;
+
+View created.
+
+SQL> select * from student;
+
+    STU_ID STU_NAME                       SEX     TOT_MARKS
+---------- ------------------------------ ------ ----------
+        10 Anu                            Female        553
+        20 Anbu                           Male          345
+        30 Malini                         Female        567
+        40 Sankar                         Male          590
+        50 Varshan                        Male          587
+		
+		
+5. Perform 3 insertions with student table and then set a savepoint s1. Again, perform any two deletion. 
+Now check the execution effect of ROLLBACK to s1, commit followed by another Rollback.
+_____________________________________________________________________________________________________________________
+
+SQL> insert into student values(60,'Divya','Female',400);
+
+1 row created.
+
+SQL> insert into student values(70,'Viji','Female',500);
+
+1 row created.
+
+SQL> insert into student values(80,'Heera','Female',490);
+
+1 row created.
+
+SQL> savepoint s1;
+
+Savepoint created.
+
+SQL> delete from student where stu_id=60;
+
+1 row deleted.
+
+SQL> delete from student where stu_id=70;
+
+1 row deleted.
+
+SQL> rollback to s1;
+
+Rollback complete.
+
+SQL> select * from student;
+
+    STU_ID STU_NAME                       SEX     TOT_MARKS
+---------- ------------------------------ ------ ----------
+        10 Anu                            Female        553
+        20 Anbu                           Male          345
+        30 Malini                         Female        567
+        40 Sankar                         Male          590
+        50 Varshan                        Male          587
+        60 Divya                          Female        400
+        70 Viji                           Female        500
+        80 Heera                          Female        490
+
+8 rows selected.
+
+SQL> commit;
+
+Commit complete.
+
+SQL> rollback to s1;
+rollback to s1
+*
+ERROR at line 1:
+ORA-01086: savepoint 'S1' never established in this session or is invalid
+
+
+
+6. Write a simple PL/SQL (Anonymous block) program to find the square and cube values for the given number;
+_________________________________________________________________________________________________________________________
+
+
+SQL> DECLARE
+  2        a NUMBER:= &a;
+  3      BEGIN
+  4
+  5         dbms_output.put_line(' Square of '||a||' : ' || a*a);
+  6
+  7          dbms_output.put_line(' Square of '||a||' : ' || a*a*a);
+  8    END;
+  9  /
+Enter value for a: 6
+old   2:       a NUMBER:= &a;
+new   2:       a NUMBER:= 6;
+
+PL/SQL procedure successfully completed.
+
+SQL> set serveroutput on;
+SQL>  DECLARE
+  2        a NUMBER:= &a;
+  3      BEGIN
+  4
+  5         dbms_output.put_line(' Square of '||a||' : ' || a*a);
+  6
+  7          dbms_output.put_line(' Square of '||a||' : ' || a*a*a);
+  8    END;
+  9  /
+Enter value for a: 6
+old   2:       a NUMBER:= &a;
+new   2:       a NUMBER:= 6;
+Square of 6 : 36
+Square of 6 : 216
+
+PL/SQL procedure successfully completed.

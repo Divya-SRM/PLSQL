@@ -1,0 +1,368 @@
+
+1. (a)Insert the following 5 rows in depart table using Insert command
+__________________________________________________________________________
+SQL> create table depart(DEPART_ID number(4) PRIMARY KEY,DEPART_NAME varchar2(30) NOT NULL,MANAGER_ID number(6) UNIQUE);
+
+Table created.
+
+SQL>insert all into depart values(10,'purchase',123) into depart values(20,'inventory',345) into depart values(30,'sales',567) into depart values(40,'materials',789)
+ 
+ into depart values(50,'production',911) select * from dual;
+ 
+5 rows created.
+
+SQL> select * from depart;
+
+ DEPART_ID DEPART_NAME                    MANAGER_ID
+---------- ------------------------------ ----------
+        10 purchase                              123
+        20 inventory                             345
+        30 sales                                 567
+        40 materials                             789
+        50 production                            911
+		
+		
+		
+2. (b)Insert the following 5 rows in employees table using insert command.
+_____________________________________________________________________________________
+
+SQL> create table employee(EMP_ID number(6) PRIMARY KEY, EMP_NAME varchar2(20), EMAIL character(25), PHONE_NUMBER varchar(10), DEPT_ID number(10));
+
+Table created.
+
+SQL> ALTER TABLE employee ADD salary number(8,2);
+
+Table altered.
+
+SQL> ALTER TABLE employee ADD CONSTRAINT FOR_KEY FOREIGN KEY(DEPT_ID) REFERENCES depart(DEPART_ID);
+
+Table altered.
+
+SQL> insert all into employee values(101,'Babu','babu101@gmail.com',9448341201,10,12000) into employee values(102,'Somu','somu102@gmail.com',9448534120,20,10000) 
+into employee values(103, 'Ramu','ramu103@gmail.com',9448886634,40,15000) into employee values(104,'Gobu','gobu104@gmail.com',9447783412,50,11500) select * from dual;
+
+4 rows created.
+
+SQL> insert all into employee values(105,'Anbu','anbu105@gmail.com',9448341201,40,24000) into employee values(106,'Preethi','prethi@gmail.com',9448534120,30,24000) 
+select * from dual;
+
+2 rows created.
+
+SQL> select * from employee;
+
+    EMP_ID EMP_NAME             EMAIL                     PHONE_NUMB    DEPT_ID
+---------- -------------------- ------------------------- ---------- ----------
+    SALARY
+----------
+       101 Babu                 babu101@gmail.com         9448341201         10
+     12000
+
+       102 Somu                 somu102@gmail.com         9448534120         20
+     10000
+
+       103 Ramu                 ramu103@gmail.com         9448886634         40
+     15000
+
+
+    EMP_ID EMP_NAME             EMAIL                     PHONE_NUMB    DEPT_ID
+---------- -------------------- ------------------------- ---------- ----------
+    SALARY
+----------
+       104 Gobu                 gobu104@gmail.com         9447783412         50
+     11500
+
+       105 Anbu                 anbu105@gmail.com         9448341201         40
+     24000
+
+       106 Preethi              prethi@gmail.com          9448534120         30
+     24000
+
+
+6 rows selected.
+
+
+3. (a)Select all employees working in materials department
+____________________________________________________________________________________
+
+
+
+SQL> select * from employee where dept_id=40;
+
+    EMP_ID EMP_NAME             EMAIL                     PHONE_NUMB    DEPT_ID
+---------- -------------------- ------------------------- ---------- ----------
+    SALARY
+----------
+       103 Ramu                 ramu103@gmail.com         9448886634         40
+     15000
+
+       105 Anbu                 anbu105@gmail.com         9448341201         40
+     24000
+	 
+	 
+	 
+3. (b)Select the department number and employees’ names who are working in sales
+___________________________________________________________________________________
+
+
+SQL> select dept_id,emp_name from employee where dept_id=30;
+
+   DEPT_ID EMP_NAME
+---------- --------------------
+        30 Preethi
+		
+		
+3. (c)Select the names of the employees who are working in materials department earning salary more than 15000
+____________________________________________________________________________________________________________
+
+
+SQL> select * from employee where dept_id=40 and salary>15000;
+
+    EMP_ID EMP_NAME             EMAIL                     PHONE_NUMB    DEPT_ID
+---------- -------------------- ------------------------- ---------- ----------
+    SALARY
+----------
+       105 Anbu                 anbu105@gmail.com         9448341201         40
+     24000
+	 
+	 
+3. (d) select all employee’s name, salary and 5% of their salary as BONUS.
+________________________________________________________________________________________________
+
+SQL> SELECT salary + (salary * 5/100) as BONUS, emp_name from employee;
+
+     BONUS EMP_NAME
+---------- --------------------
+     12600 Babu
+     10185 Somu
+     15750 Ramu
+     12075 Gobu
+     25200 Anbu
+     27720 Preethi
+
+6 rows selected.
+
+
+3. (e) select all employees details whose name starts with letter ‘R’;
+________________________________________________________________________________________
+
+
+SQL> select * from employee where emp_name like 'R%';
+
+    EMP_ID EMP_NAME             EMAIL                     PHONE_NUMB    DEPT_ID
+---------- -------------------- ------------------------- ---------- ----------
+    SALARY
+----------
+       103 Ramu                 ramu103@gmail.com         9448886634         40
+     15000
+	 
+	 
+	 
+4. (a)Update all employee records in sales department with 10% raise in salary
+____________________________________________________________________________________________
+
+
+SQL> update employee set salary=salary+salary*0.10 where dept_id=30;
+
+1 row updated.
+
+SQL> select * from employee;
+
+    EMP_ID EMP_NAME             EMAIL                     PHONE_NUMB    DEPT_ID
+---------- -------------------- ------------------------- ---------- ----------
+    SALARY
+----------
+       101 Babu                 babu101@gmail.com         9448341201         10
+     12000
+
+       102 Somu                 somu102@gmail.com         9448534120         20
+     10000
+
+       103 Ramu                 ramu103@gmail.com         9448886634         40
+     15000
+
+
+    EMP_ID EMP_NAME             EMAIL                     PHONE_NUMB    DEPT_ID
+---------- -------------------- ------------------------- ---------- ----------
+    SALARY
+----------
+       104 Gobu                 gobu104@gmail.com         9447783412         50
+     11500
+
+       105 Anbu                 anbu105@gmail.com         9448341201         40
+     24000
+
+       106 Preethi              prethi@gmail.com          9448534120         30
+     26400
+
+
+6 rows selected.
+
+
+
+4. (b)Update all employees’ salary with 3% reduction in inventory department.
+__________________________________________________________________________________________________
+
+SQL> update employee set salary=salary-salary*(3/100) where dept_id=20;
+
+1 row updated.
+
+SQL> select * from employee;
+
+    EMP_ID EMP_NAME             EMAIL                     PHONE_NUMB    DEPT_ID
+---------- -------------------- ------------------------- ---------- ----------
+    SALARY
+----------
+       101 Babu                 babu101@gmail.com         9448341201         10
+     12000
+
+       102 Somu                 somu102@gmail.com         9448534120         20
+      9700
+
+       103 Ramu                 ramu103@gmail.com         9448886634         40
+     15000
+
+
+    EMP_ID EMP_NAME             EMAIL                     PHONE_NUMB    DEPT_ID
+---------- -------------------- ------------------------- ---------- ----------
+    SALARY
+----------
+       104 Gobu                 gobu104@gmail.com         9447783412         50
+     11500
+
+       105 Anbu                 anbu105@gmail.com         9448341201         40
+     24000
+
+       106 Preethi              prethi@gmail.com          9448534120         30
+     26400
+
+
+6 rows selected.
+
+
+
+6. Delete all employees who are drawing salary less than 12000
+_________________________________________________________________________
+
+
+
+SQL> delete from employee where salary<12000;
+
+2 rows deleted.
+
+SQL> select * from employee;
+
+    EMP_ID EMP_NAME             EMAIL                     PHONE_NUMB    DEPT_ID
+---------- -------------------- ------------------------- ---------- ----------
+    SALARY
+----------
+       101 Babu                 babu101@gmail.com         9448341201         10
+     12000
+
+       103 Ramu                 ramu103@gmail.com         9448886634         40
+     15000
+
+       105 Anbu                 anbu105@gmail.com         9448341201         40
+     24000
+
+
+    EMP_ID EMP_NAME             EMAIL                     PHONE_NUMB    DEPT_ID
+---------- -------------------- ------------------------- ---------- ----------
+    SALARY
+----------
+       106 Preethi              prethi@gmail.com          9448534120         30
+     26400
+
+
+
+SQL> create table updatedemp as select emp_name,emp_id,email from employee where emp_id>20;
+
+Table created.
+
+SQL> select * from updatedemp;
+
+EMP_NAME                 EMP_ID EMAIL
+-------------------- ---------- -------------------------
+Babu                        101 babu101@gmail.com
+Ramu                        103 ramu103@gmail.com
+Anbu                        105 anbu105@gmail.com
+Preethi                     106 prethi@gmail.com
+
+SQL> drop table viewtab;
+drop table viewtab
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+SQL> create table viewtab as select * from updatedemp;
+
+Table created.
+
+SQL> select * from viewtab;
+
+EMP_NAME                 EMP_ID EMAIL
+-------------------- ---------- -------------------------
+Babu                        101 babu101@gmail.com
+Ramu                        103 ramu103@gmail.com
+Anbu                        105 anbu105@gmail.com
+Preethi                     106 prethi@gmail.com
+
+SQL> create view mytab as select emp_id,emp_name,dept_id,salary from employee where salary>=10000;
+
+View created.
+
+SQL> select * from mytab;
+
+    EMP_ID EMP_NAME                DEPT_ID     SALARY
+---------- -------------------- ---------- ----------
+       101 Babu                         10      12000
+       103 Ramu                         40      15000
+       105 Anbu                         40      24000
+       106 Preethi                      30      26400
+
+SQL> select * from employee order by salary asc;
+
+    EMP_ID EMP_NAME             EMAIL                     PHONE_NUMB    DEPT_ID
+---------- -------------------- ------------------------- ---------- ----------
+    SALARY
+----------
+       101 Babu                 babu101@gmail.com         9448341201         10
+     12000
+
+       103 Ramu                 ramu103@gmail.com         9448886634         40
+     15000
+
+       105 Anbu                 anbu105@gmail.com         9448341201         40
+     24000
+
+
+    EMP_ID EMP_NAME             EMAIL                     PHONE_NUMB    DEPT_ID
+---------- -------------------- ------------------------- ---------- ----------
+    SALARY
+----------
+       106 Preethi              prethi@gmail.com          9448534120         30
+     26400
+
+
+SQL> select * from employee order by emp_name desc;
+
+    EMP_ID EMP_NAME             EMAIL                     PHONE_NUMB    DEPT_ID
+---------- -------------------- ------------------------- ---------- ----------
+    SALARY
+----------
+       103 Ramu                 ramu103@gmail.com         9448886634         40
+     15000
+
+       106 Preethi              prethi@gmail.com          9448534120         30
+     26400
+
+       101 Babu                 babu101@gmail.com         9448341201         10
+     12000
+
+
+    EMP_ID EMP_NAME             EMAIL                     PHONE_NUMB    DEPT_ID
+---------- -------------------- ------------------------- ---------- ----------
+    SALARY
+----------
+       105 Anbu                 anbu105@gmail.com         9448341201         40
+     24000
